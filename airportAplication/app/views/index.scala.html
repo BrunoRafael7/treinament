@@ -1,7 +1,89 @@
-@(message: String)
+@(tasks: List[Task], taskForm: Form[Task])
 
-@main("Welcome to Play") {
+@import helper._
+@import play.i18n._
 
-    @play20.welcome(message, style = "Java")
-
+@main("Templates") {
+	<head>
+		<style type="text/css" media="all"> 
+			.title, h2{
+				color : #FFFFFF;
+				text-align:center;
+			}
+			.title{
+				font-family : Arial;
+			}
+			body{
+				text-align:center;
+				background-color : #6487ed;
+			}
+			table{
+				height:150px;
+				width:200px;
+				text-align:center;
+				border: 1px solid black;
+			}
+			
+			tr{
+				height:150px;
+				width:350px;
+			}
+			
+			td{
+				text-align:center;
+				color : #FFFFFF;
+			 	height:150px;
+			 	width:150px;
+			 	padding:1px;
+			}
+			
+		</style>
+		
+		<h1 class="title"> Adicionar uma nova tarefa</h1>
+		<h2> @tasks.size() tarefa(s)</h2>
+	</head>
+	<body>
+	<table>
+	@if(tasks.size() != 0){
+		
+		<tr>
+		<td>
+		@for(task <- tasks){
+			@if(!task.isComplete()){
+					Tarefas Não Concluídas<br>
+					@task.getLabel() , @task.getProject(), @task.getPriority()
+					@form(routes.Application.update(task.getId())){
+						<input type="submit" value=@Messages.get("Complete")>
+					}
+					@form(routes.Application.deleteTask(task.getId())){
+						<input type="submit" value=@Messages.get("Remove")>
+					}
+			}
+		}
+		</td>
+		<td>
+		Tarefas Concluídas<br>
+		@for(task <- tasks){	
+			@if(task.isComplete()){
+					@task.getLabel() , @task.getProject(), @task.getPriority()
+					@form(routes.Application.deleteTask(task.getId())){
+						<input type="submit" value=@Messages.get("Remove")>
+					}
+						
+			}
+			<br><br><br>
+		}
+		</td>
+		</tr>	
+	}
+	</table>
+	
+	@form(routes.Application.newTask()){
+		@inputText(taskForm("label"), '_label->"Nova tarefa")
+		@inputText(taskForm("project"), '_label->"Nome do projeto")
+		@inputText(taskForm("priority"), '_label->"Defina uma prioridade")
+		
+		<Button>@Messages.get("Create")</Button>
+	}
+	</body>
 }
