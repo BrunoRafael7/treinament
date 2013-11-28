@@ -43,11 +43,8 @@
 		<h2> @tasks.size() tarefa(s)</h2>
 	</head>
 	<body>
-	<table>
 	@if(tasks.size() != 0){
 		
-		<tr>
-		<td>
 		@for(task <- tasks){
 			@if(!task.isComplete()){
 					Tarefas Não Concluídas<br>
@@ -60,8 +57,6 @@
 					}
 			}
 		}
-		</td>
-		<td>
 		Tarefas Concluídas<br>
 		@for(task <- tasks){	
 			@if(task.isComplete()){
@@ -73,10 +68,7 @@
 			}
 			<br><br><br>
 		}
-		</td>
-		</tr>	
 	}
-	</table>
 	
 	@form(routes.Application.newTask()){
 		@inputText(taskForm("label"), '_label->"Nova tarefa")
